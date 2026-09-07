@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import { useDebounce } from './hooks/useDebounce';
 import { useUsers } from './hooks/useUsers';
 import { usePosts } from './hooks/usePosts';
 import { UserSearch } from './components/UserSearch/UserSearch';
 import { UserList } from './components/UserList/UserList';
 import { PostList } from './components/PostList/PostList';
-import { Loading, ErrorState, EmptyState } from './components/UI/States';
+import { ErrorState, EmptyState, UserSkeletonList } from './components/UI/States';
 
 function App() {
   const { users, loading: usersLoading, error: usersError, retry: retryUsers } = useUsers();
@@ -24,16 +25,18 @@ function App() {
     retry: retryPosts 
   } = usePosts(selectedUserId);
 
-  // Client-side filtering
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  // Client-side filtering with debounce
   const filteredUsers = useMemo(() => {
-    if (!searchTerm.trim()) return users;
+    if (!debouncedSearchTerm.trim()) return users;
     
-    const lowerTerm = searchTerm.toLowerCase();
+    const lowerTerm = debouncedSearchTerm.toLowerCase();
     return users.filter(user => 
       user.name.toLowerCase().includes(lowerTerm) || 
       user.email.toLowerCase().includes(lowerTerm)
     );
-  }, [users, searchTerm]);
+  }, [users, debouncedSearchTerm]);
 
   return (
     <div className="app-container">
@@ -47,7 +50,7 @@ function App() {
           <UserSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           
           <div className="scroll-area">
-            {usersLoading && <Loading />}
+            {usersLoading && <UserSkeletonList />}
             
             {usersError && <ErrorState message={usersError} onRetry={retryUsers} />}
             

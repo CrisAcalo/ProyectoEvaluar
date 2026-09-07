@@ -1,4 +1,3 @@
-import React from 'react';
 
 export const Loading = () => (
   <div className="state-container" role="status" aria-label="Cargando">
@@ -26,5 +25,30 @@ export const EmptyState = ({ message }: { message: string }) => (
       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     </svg>
     <p style={{ color: 'var(--text-muted)' }}>{message}</p>
+  </div>
+);
+
+export const UserSkeletonList = () => (
+  <div className="user-list">
+    {[1, 2, 3, 4, 5].map((i) => (
+      <div key={i} className="skeleton-card">
+        <div className="skeleton skeleton-title" style={{ width: '50%' }}></div>
+        <div className="skeleton skeleton-text" style={{ width: '80%' }}></div>
+        <div className="skeleton skeleton-text" style={{ width: '60%' }}></div>
+      </div>
+    ))}
+  </div>
+);
+
+export const PostSkeletonList = () => (
+  <div className="post-list">
+    {[1, 2, 3].map((i) => (
+      <div key={i} className="skeleton-card">
+        <div className="skeleton skeleton-title" style={{ width: '70%' }}></div>
+        <div className="skeleton skeleton-text"></div>
+        <div className="skeleton skeleton-text"></div>
+        <div className="skeleton skeleton-text" style={{ width: '40%' }}></div>
+      </div>
+    ))}
   </div>
 );

@@ -1,6 +1,5 @@
-import React from 'react';
 import type { Post, User } from '../../types';
-import { Loading, ErrorState, EmptyState } from '../UI/States';
+import { ErrorState, EmptyState, PostSkeletonList } from '../UI/States';
 
 interface PostListProps {
   user: User | null;
@@ -84,7 +83,7 @@ export const PostList: React.FC<PostListProps> = ({ user, posts, loading, error,
       
       <h2 className="posts-title">Últimas Publicaciones</h2>
 
-      {loading && <Loading />}
+      {loading && <PostSkeletonList />}
       
       {error && <ErrorState message={error} onRetry={onRetry} />}
       
